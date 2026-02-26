@@ -1,0 +1,326 @@
+{
+  "$schema": "skill-dependencies-v1",
+  "suite": "test",
+  "last_verified": "2026-02-14",
+  "skills": {
+    "test-init.md": {
+      "version": "1.2.1",
+      "interface": {
+        "input": ["project_root (자동 감지)"],
+        "output": ["init_status (READY|CREATED|NEEDS_INPUT|NOT_READY)"],
+        "output_fields": [
+          "status",
+          "ctx.project_root",
+          "ctx.test_root",
+          "ctx.ticket_folder",
+          "created[]",
+          "scaffolded[]",
+          "protected[]",
+          "auto_filled[]",
+          "integration_profile",
+          "scaffold_manifest (INTERNAL)",
+          "ctx.pending_permissions",
+          "needs_input[]",
+          "errors[]"
+        ]
+      },
+      "consumed_by": [
+        { "file": "test-run.md", "section": "Step 0.1", "usage": "Workspace 초기화 호출" }
+      ],
+      "consumes": [],
+      "shared_concepts": ["boilerplate", "scaffold", "pointer"]
+    },
+    "test-gate.md": {
+      "version": "4.1.0",
+      "interface": {
+        "input": ["티켓 ID", "브랜치명", "이전 gate 결과 (optional)"],
+        "output": ["test_baseline 객체"],
+        "output_fields": [
+          "mode (NEW|REUSE|REPLAN)",
+          "baseline_mode (match|jira|code|union)",
+          "analysis_mode (METADATA|HYBRID|SOURCE_DIRECT)",
+          "jira_digest[]",
+          "code_digest[]",
+          "comparison { matched[], jira_only[], code_only[] }",
+          "test_scope[]",
+          "affected_services[] (repo, type, branch, commits)",
+          "test_types { api_test, db_verify, web_ui_capture, mobile_api_simulation, event_verify }",
+          "server_connectivity",
+          "server_urls",
+          "reason"
+        ]
+      },
+      "consumed_by": [
+        { "file": "test-run.md", "section": "Step 1", "usage": "Gate 호출 → test_baseline 수신 → mode로 시트 판정 → gate 결과 파일 저장" },
+        { "file": "test-plan.md", "section": "INPUT", "usage": "jira_digest, code_digest, comparison, baseline_mode, test_scope, affected_services, test_types" }
+      ],
+      "consumes": [
+        { "file": "test-plan.md", "fields": ["Section 0 (이전 시트의 digest + affected_services + test_types → 1.8 비교용)"] }
+      ],
+      "shared_concepts": ["analysis_mode", "test_types", "server_connectivity", "baseline_mode", "mode"]
+    },
+    "test-plan.md": {
+      "version": "2.0.0",
+      "interface": {
+        "input": [
+          "ctx.test_baseline (from test-gate)",
+          "ctx.test_baseline.jira_digest",
+          "ctx.test_baseline.code_digest",
+          "ctx.test_baseline.comparison",
+          "ctx.test_baseline.baseline_mode",
+          "ctx.test_baseline.test_scope",
+          "ctx.test_baseline.affected_services",
+          "ctx.test_baseline.test_types"
+        ],
+        "output": ["테스트시트 파일 ({ticket}_테스트시트_v{N}_{date}.md)"],
+        "output_fields": [
+          "ctx.sheet (파일 경로)",
+          "ctx.sheet_version (v{N})",
+          "테스트시트 Section 0: Test Baseline (jira_digest + code_digest + affected_services + test_types 저장)",
+          "테스트시트 Section 1: 변경 요약",
+          "테스트시트 Section 2: 영향도 분석",
+          "테스트시트 Section 3: 시나리오 목록",
+          "테스트시트 Section 4: 시나리오 상세 (TC 포함)"
+        ]
+      },
+      "consumed_by": [
+        { "file": "test-run.md", "section": "Step 3", "usage": "시트 생성 호출" },
+        { "file": "test-data.md", "section": "Step 2", "usage": "테스트시트에서 TC별 데이터 요구사항 추출" },
+        { "file": "test-scheduler.md", "section": "Step 1", "usage": "시나리오 의존성 추출" },
+        { "file": "test-reporter.md", "section": "INPUT", "usage": "시트 정보 포함" }
+      ],
+      "consumes": [
+        { "file": "test-gate.md", "fields": ["test_baseline 전체"] }
+      ],
+      "shared_concepts": ["sheet_version", "jira_digest", "code_digest", "test_scope"]
+    },
+    "test-data.md": {
+      "version": "2.0.0",
+      "interface": {
+        "input": [
+          "테스트시트 (from test-plan)",
+          "ctx.sheet_version (from test-plan)"
+        ],
+        "output": ["데이터매핑.json ({ticket}_데이터매핑.json)"],
+        "output_fields": [
+          "ctx.data_mapping",
+          "mappings[].tc_id",
+          "mappings[].status (MAPPED|NOT_FOUND|PROVISIONING_NEEDED|PROVISIONED)",
+          "mappings[].data { entity_code, partition_id, ... }",
+          "mappings[].discovery_query",
+          "summary { total_tcs, mapped, not_found, provisioning_needed, coverage }"
+        ]
+      },
+      "consumed_by": [
+        { "file": "test-run.md", "section": "Step 4", "usage": "데이터 매핑 호출 + 스킵 판정" },
+        { "file": "test-scheduler.md", "section": "INPUT", "usage": "TC별 매핑 데이터로 DAG 생성" },
+        { "file": "test-provisioning.md", "section": "INPUT", "usage": "NOT_FOUND TC의 데이터 요구사항" }
+      ],
+      "consumes": [
+        { "file": "test-plan.md", "fields": ["테스트시트 (TC 데이터 요구사항)", "ctx.sheet_version"] }
+      ],
+      "shared_concepts": ["MAPPED", "NOT_FOUND", "Phase", "Group", "STATIC", "DERIVED", "known_cross_db_patterns"]
+    },
+    "test-scheduler.md": {
+      "version": "1.0.0",
+      "interface": {
+        "input": [
+          "ctx.sheet (from test-plan)",
+          "ctx.data_mapping (from test-data)"
+        ],
+        "output": ["test_execution_plan.json (DAG)"],
+        "output_fields": [
+          "ctx.execution_plan",
+          "execution_plan[].tier",
+          "execution_plan[].parallel_tasks[]",
+          "execution_plan[].parallel_tasks[].id",
+          "execution_plan[].parallel_tasks[].type (PROVISION|TEST)",
+          "execution_plan[].parallel_tasks[].depends_on[]"
+        ]
+      },
+      "consumed_by": [
+        { "file": "test-run.md", "section": "Step 5.1 + 5.2", "usage": "실행 계획 생성 + Tiered Loop" }
+      ],
+      "consumes": [
+        { "file": "test-plan.md", "fields": ["테스트시트 (시나리오 의존성)"] },
+        { "file": "test-data.md", "fields": ["데이터매핑.json (TC 매핑 상태)"] }
+      ],
+      "shared_concepts": ["Tier", "DAG", "parallel_tasks", "depends_on"]
+    },
+    "test-provisioning.md": {
+      "version": "1.0.0",
+      "interface": {
+        "input": [
+          "Work unit (from test-scheduler Tier 0)",
+          "데이터매핑.json의 NOT_FOUND TC (from test-data)"
+        ],
+        "output": ["생성된 엔티티 ID", "데이터매핑.json 업데이트 (status → PROVISIONED)"],
+        "output_fields": [
+          "created_entity_ids",
+          "updated_mapping_status"
+        ]
+      },
+      "consumed_by": [
+        { "file": "test-scheduler.md", "section": "Tier 0", "usage": "Provisioning Task로 호출" },
+        { "file": "test-run.md", "section": "Step 5.2", "usage": "PROVISION type Task 실행" }
+      ],
+      "consumes": [
+        { "file": "test-data.md", "fields": ["NOT_FOUND TC 데이터 요구사항"] },
+        { "file": "test-scheduler.md", "fields": ["Work unit (sequence, target)"] }
+      ],
+      "shared_concepts": ["PROVISIONED", "sequence"]
+    },
+    "test-reporter.md": {
+      "version": "3.0.0",
+      "interface": {
+        "input": [
+          "ctx.partial_results (from test-run Step 5)",
+          "ctx.sheet (from test-plan)",
+          "ctx.test_baseline (from test-gate)"
+        ],
+        "output": ["Confluence 테스트결과 파일 ({ticket}_Confluence_테스트결과_v{N}.{M}_{date}.md)"],
+        "output_fields": [
+          "Confluence 호환 마크다운 보고서",
+          "template_compliance_check"
+        ]
+      },
+      "consumed_by": [
+        { "file": "test-run.md", "section": "Step 6", "usage": "최종 보고서 생성" }
+      ],
+      "consumes": [
+        { "file": "test-plan.md", "fields": ["ctx.sheet"] },
+        { "file": "test-gate.md", "fields": ["ctx.test_baseline"] },
+        { "file": "test-evidence.md", "fields": ["Pass/Fail 근거 규칙 (참조)"] }
+      ],
+      "shared_concepts": ["partial_results", "report_version"]
+    },
+    "test-evidence.md": {
+      "version": "1.0.0",
+      "interface": {
+        "input": [],
+        "output": ["근거 작성 가이드라인 (참조용, 데이터 아님)"],
+        "output_fields": []
+      },
+      "consumed_by": [
+        { "file": "test-reporter.md", "section": "근거 규칙", "usage": "Pass/Fail 근거 작성 시 참조" },
+        { "file": "test-run.md", "section": "Step 5.3", "usage": "TC 실행 시 근거 형식 참조" }
+      ],
+      "consumes": [],
+      "shared_concepts": ["Level 1-4 근거", "db_verify", "mobile_api_simulation", "web_ui_capture"]
+    },
+    "test-workspace-conventions.md": {
+      "version": "none",
+      "interface": {
+        "input": [],
+        "output": ["경로 규칙, 디렉토리 구조 (참조용)"],
+        "output_fields": []
+      },
+      "consumed_by": [
+        { "file": "test-run.md", "section": "Step 0", "usage": "프로젝트 구조 규칙 로드" },
+        { "file": "test-init.md", "section": "전체", "usage": "디렉토리 구조 검증 기준" },
+        { "file": "SKILL.md", "section": "Runtime Rule", "usage": "첫 번째 참조 파일" }
+      ],
+      "consumes": [],
+      "shared_concepts": ["underscore prefix", "project_root", "test_root"]
+    },
+    "test-run.md": {
+      "version": "4.2.0",
+      "interface": {
+        "input": ["티켓 ID (사용자 요청)"],
+        "output": ["전체 파이프라인 결과"],
+        "output_fields": [
+          "ctx.* (전체 컨텍스트)",
+          "Confluence 보고서 파일",
+          "{티켓}_gate_{YYYYMMDD_HHmmss}.json (Gate 결과 영속화)",
+          "partial_results/{TC_ID}.json (TC별 실행 결과 — test-reporter 형식 계약)"
+        ]
+      },
+      "consumed_by": [
+        { "file": "SKILL.md", "section": "Workflow", "usage": "엔트리 포인트에서 오케스트레이터로 라우팅" }
+      ],
+      "consumes": [
+        { "file": "test-init.md", "fields": ["init_status"] },
+        { "file": "test-gate.md", "fields": ["test_baseline 전체"] },
+        { "file": "test-plan.md", "fields": ["ctx.sheet, ctx.sheet_version"] },
+        { "file": "test-data.md", "fields": ["ctx.data_mapping"] },
+        { "file": "test-scheduler.md", "fields": ["ctx.execution_plan"] },
+        { "file": "test-reporter.md", "fields": ["Confluence 보고서"] },
+        { "file": "test-evidence.md", "fields": ["근거 규칙 (참조)"] },
+        { "file": "test-workspace-conventions.md", "fields": ["경로 규칙 (참조)"] }
+      ],
+      "shared_concepts": ["ctx", "Tier", "partial_results", "mode", "test_types"]
+    }
+  },
+  "shared_concepts_glossary": {
+    "test_baseline": {
+      "definition": "Gate 통과 시 생성되는 중앙 기준 객체",
+      "defined_in": "test-gate.md",
+      "used_in": ["test-run.md", "test-plan.md", "test-reporter.md"]
+    },
+    "mode": {
+      "definition": "테스트시트 판정 모드",
+      "values": ["NEW", "REUSE", "REPLAN"],
+      "defined_in": "test-gate.md (1.8)",
+      "used_in": ["test-run.md (Step 2)"]
+    },
+    "analysis_mode": {
+      "definition": "코드 분석 방법",
+      "values": ["METADATA", "HYBRID", "SOURCE_DIRECT"],
+      "defined_in": "test-gate.md (1.0)",
+      "used_in": ["test-run.md", "README.md"]
+    },
+    "test_types": {
+      "definition": "Gate에서 결정된 테스트 유형 플래그",
+      "values": ["api_test", "db_verify", "web_ui_capture", "mobile_api_simulation", "event_verify"],
+      "defined_in": "test-gate.md (1.6)",
+      "used_in": ["test-run.md (5.3)", "test-plan.md", "test-evidence.md"]
+    },
+    "Tier": {
+      "definition": "test-scheduler의 실행 레이어 (DAG 깊이)",
+      "defined_in": "test-scheduler.md",
+      "used_in": ["test-run.md (Step 5.2)"],
+      "⚠️ conflict": "test-data.md의 Phase 개념과 유사하지만 다른 맥락"
+    },
+    "Phase": {
+      "definition": "test-data의 쿼리 실행 단계 (의존성 기반)",
+      "defined_in": "test-data.md (Step 3)",
+      "used_in": ["test-data.md 내부만"],
+      "note": "INTERNAL 개념 — 다른 스킬에서 참조하지 않음"
+    },
+    "sheet_version": {
+      "definition": "테스트시트 메이저 버전",
+      "format": "v{N}",
+      "defined_in": "test-plan.md",
+      "used_in": ["test-data.md (스킵 판정)", "test-run.md"]
+    },
+    "report_version": {
+      "definition": "테스트 결과 보고서 버전",
+      "format": "v{N}.{M}",
+      "defined_in": "test-reporter.md",
+      "used_in": ["test-run.md"]
+    },
+    "partial_results": {
+      "definition": "TC별 실행 결과 파일 모음",
+      "defined_in": "test-run.md (Step 5.2)",
+      "used_in": ["test-reporter.md"]
+    }
+  },
+  "known_inconsistencies": [],
+  "resolved_inconsistencies": [
+    {
+      "id": "INC-001",
+      "resolved_at": "2026-02-14",
+      "resolution": "확인 완료 — test-run.md는 test-data 내부 Step 번호를 참조하지 않음 (INTERNAL 원칙 준수). 수정 불필요."
+    },
+    {
+      "id": "INC-002",
+      "resolved_at": "2026-02-14",
+      "resolution": "test-run.md Step 1 헤더를 v4.1로 업데이트, 워크플로우 다이어그램에 Q0 분석 모드 선택 추가."
+    },
+    {
+      "id": "INC-003",
+      "resolved_at": "2026-02-14",
+      "resolution": "SKILL.md Workflow 섹션을 현재 스킬 버전 기준으로 전면 업데이트 (gate v4.1, data v2.0 등)."
+    }
+  ]
+}

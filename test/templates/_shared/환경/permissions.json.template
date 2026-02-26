@@ -1,0 +1,29 @@
+{
+  "$schema": "project-test-permissions-v1",
+  "project": "{TODO: 프로젝트명}",
+  "description": "프로젝트별 테스트 도구 권한 매핑",
+
+  "db_tools": [
+    { "pattern": "{TODO: mcp__postgres_{service}__query}", "db": "{TODO: db_name}", "service": "{TODO: service-name}" }
+  ],
+
+  "issue_tracker_tools": [
+    { "pattern": "{TODO: mcp_tool_name}", "purpose": "{TODO: 용도}" }
+  ],
+
+  "ui_tools": [
+    { "pattern": "{TODO: mcp_tool_name}", "purpose": "{TODO: 용도}" }
+  ],
+
+  "event_tools": [],
+
+  "settings_template": {
+    "description": "위 모든 도구를 settings.local.json에 추가할 때 사용하는 목록",
+    "permissions_allow": [
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(git -C:*)",
+      "{TODO: 프로젝트 DB/UI/이슈트래커 도구 패턴 추가}"
+    ]
+  }
+}

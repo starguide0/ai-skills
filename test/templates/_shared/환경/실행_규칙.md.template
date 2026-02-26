@@ -1,0 +1,13 @@
+# LLM 테스트 실행 규칙
+
+> 참조 Step: test-run.md Step 5 (Execute)
+
+## 필수 규칙
+
+- 읽기 전용 쿼리만 실행 (MCP DB 도구 제약)
+- POST/PUT/DELETE API 호출 전 사용자 확인 필수
+- 운영 환경 접근 금지
+
+## 프로젝트별 추가 규칙
+
+{TODO: 프로젝트 특화 실행 규칙 기술}

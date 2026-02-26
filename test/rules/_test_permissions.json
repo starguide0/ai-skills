@@ -1,0 +1,70 @@
+{
+  "$schema": "test-permissions-v1",
+  "description": "테스트 파이프라인 실행에 필요한 Claude Code 권한 범주 정의. Step 0.3에서 사전 검증에 사용. 실제 도구 이름은 프로젝트 레벨 설정에서 로드.",
+  "last_updated": "2026-02-14",
+
+  "_category_mapping": {
+    "description": "test-init.md integration_profile 필드명 → permissions.json 카테고리 매핑",
+    "profile.db": "db_tools (db_query action)",
+    "profile.web_ui": "ui_tools (web_ui_capture action)",
+    "profile.issue_tracker": "issue_tracker_tools (issue_tracker action)",
+    "profile.event": "event_tools"
+  },
+
+  "always_required": {
+    "description": "모든 테스트 실행에 필요한 기본 권한 범주",
+    "categories": [
+      {
+        "category": "api_call",
+        "patterns": ["Bash(curl:*)", "Bash(python3:*)"],
+        "reason": "API 호출 (Gate 서버 접속 확인, Execute API 테스트, Provisioning 엔터티 생성)",
+        "steps": ["Step 1", "Step 5", "Step 5 (Provision)"]
+      },
+      {
+        "category": "git_analysis",
+        "patterns": ["Bash(git -C:*)", "Bash(git fetch:*)", "Bash(git show:*)"],
+        "reason": "코드 분석 (커밋 히스토리, 브랜치 비교, 변경 파일 목록)",
+        "steps": ["Step 1"]
+      },
+      {
+        "category": "db_query",
+        "patterns": "FROM_PROJECT_CONFIG",
+        "config_path": "test/_shared/환경/permissions.json#db_tools",
+        "reason": "DB 조회 (테스트 데이터 탐색, before/after 스냅샷)",
+        "steps": ["Step 4", "Step 5"]
+      },
+      {
+        "category": "issue_tracker",
+        "patterns": "FROM_PROJECT_CONFIG",
+        "config_path": "test/_shared/환경/permissions.json#issue_tracker_tools",
+        "reason": "이슈 트래커 조회 (Gate에서 요구사항 확인)",
+        "steps": ["Step 1"]
+      }
+    ]
+  },
+
+  "conditional": {
+    "web_ui_capture": {
+      "description": "FE_WEB 변경 시 UI 스크린샷 캡처에 필요",
+      "patterns": "FROM_PROJECT_CONFIG",
+      "config_path": "test/_shared/환경/permissions.json#ui_tools"
+    },
+    "mobile_api_simulation": {
+      "description": "FE_APP 변경 시 모바일 API 시뮬레이션에 필요",
+      "patterns": [],
+      "note": "api_call 카테고리의 Bash(curl:*)로 처리"
+    },
+    "event_verify": {
+      "description": "메시지 큐 이벤트 검증에 필요",
+      "patterns": "FROM_PROJECT_CONFIG",
+      "config_path": "test/_shared/환경/permissions.json#event_tools"
+    }
+  },
+
+  "resolution_order": [
+    "1. 이 파일에서 범주(category)별 필수 여부 판정",
+    "2. 'FROM_PROJECT_CONFIG' 항목은 프로젝트 설정 파일에서 실제 도구 이름 로드",
+    "3. 직접 정의된 patterns (Bash 등)은 그대로 사용",
+    "4. 합산된 전체 목록을 settings.local.json과 대조"
+  ]
+}

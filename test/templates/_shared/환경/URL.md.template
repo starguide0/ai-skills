@@ -1,0 +1,15 @@
+# 테스트 환경 URL
+
+> 참조 Step: test-gate.md, test-data.md
+
+## 환경별 서비스 URL
+
+| 환경 | Base URL | 비고 |
+|------|----------|------|
+| dev | {TODO: dev 환경 Base URL} | |
+| staging | {TODO: staging 환경 Base URL} | |
+
+## 공통 설정
+
+- 테스트 대상 환경: {TODO: dev / staging}
+- 데이터 격리 정책: {TODO: 격리 방법 기술}
