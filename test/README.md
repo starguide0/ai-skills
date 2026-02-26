@@ -37,11 +37,21 @@ pip3 install requests
 
 의존성 설치가 끝난 후, 사용하는 클라이언트 툴에 맞춰 연동합니다.
 
-#### 방법 A: Claude MCP(Model Context Protocol) 연동 (권장)
+#### 방법 A: Superpowers CLI를 통한 설치 (가장 권장)
 
-Claude 데스크톱 앱의 설정(`claude_desktop_config.json` 등)에서 사용할 폴더를 마운트합니다.
+`superpower` 도구를 사용 중이라면 CLI 명령어로 즉시 스킬을 설치하고 마운트할 수 있습니다.
+이 방식은 Claude 워크스페이스에 자동으로 플러그인을 연결해 줍니다.
 
-- `superpowers` 등 스킬 마운트 확장 도구를 사용한다면, 해당 프로젝트의 설정에서 `~/project/skills/test` 경로를 추가하여 플러그인 폴더로 인식하게 합니다.
+1. 터미널을 열고 아래 명령어를 실행합니다.
+   ```bash
+   superpower install starguide0/ai-skills/test
+   ```
+2. 설치 후, `~/project/skills/test` (또는 superpowers가 전역으로 관리하는 경로) 내부에서 필수 파이썬 라이브러리가 설치되었는지 점검합니다. 만약 의존성 에러가 난다면 해당 폴더로 이동 후 수동으로 설치합니다.
+   ```bash
+   pip3 install requests
+   ```
+
+#### 방법 B: Claude MCP(Model Context Protocol) 수동 연동
 
 #### 방법 B: Workspace 직접 배치 (Legacy)
 
