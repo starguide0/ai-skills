@@ -37,19 +37,22 @@ pip3 install requests
 
 의존성 설치가 끝난 후, 사용하는 클라이언트 툴에 맞춰 연동합니다.
 
-#### 방법 A: Superpowers CLI를 통한 설치 (가장 권장)
+#### 방법 A: Superpowers 기반 설치 (가장 권장)
 
-`superpower` 도구를 사용 중이라면 CLI 명령어로 즉시 스킬을 설치하고 마운트할 수 있습니다.
-이 방식은 Claude 워크스페이스에 자동으로 플러그인을 연결해 줍니다.
+[obra/superpowers](https://github.com/obra/superpowers) 프레임워크가 적용된 환경(Claude Code, Cursor 등)을 사용 중이라면, 로컬 워크스페이스의 스킬 디렉토리에 이 저장소를 직접 클론하여 연동할 수 있습니다.
 
-1. 터미널을 열고 아래 명령어를 실행합니다.
+1. 터미널을 열고 워크스페이스(프로젝트 루트)에서 다음 명령어를 실행하여 스킬을 다운로드합니다.
    ```bash
-   superpower install starguide0/ai-skills/test
+   # Claude Code / Cursor 등 Superpowers가 바라보는 스킬 폴더 생성 및 클론
+   mkdir -p .claude/skills
+   git clone https://github.com/starguide0/ai-skills.git .claude/skills/test
    ```
-2. 설치 후, `~/project/skills/test` (또는 superpowers가 전역으로 관리하는 경로) 내부에서 필수 파이썬 라이브러리가 설치되었는지 점검합니다. 만약 의존성 에러가 난다면 해당 폴더로 이동 후 수동으로 설치합니다.
+2. 설치 후, 해당 폴더로 이동하여 내장 Python 스크립트 실행에 필요한 필수 라이브러리가 설치되었는지 점검합니다.
    ```bash
+   cd .claude/skills/test
    pip3 install requests
    ```
+3. (선택사항) 만약 당신의 환경이 아직 `superpowers` 런타임 자체를 가지고 있지 않다면, [공식 가이드](https://github.com/obra/superpowers)를 참고하여 Claude Code의 경우 `/plugin install`, Cursor의 경우 `/plugin-add` 명령어로 먼저 상위 프레임워크를 연동해 주십시오.
 
 #### 방법 B: Claude MCP(Model Context Protocol) 수동 연동
 
