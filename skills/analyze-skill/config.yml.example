@@ -1,0 +1,23 @@
+# analyze-skill 에이전트 등급 및 토큰 최적화 설정
+# (복사하여 config.yml 로 사용하거나 시스템이 자동 생성 제안 시 수정 가능)
+
+# 등급별 모델 정의 (플랫폼에 따라 자동 선택됨)
+grades:
+  A: # 최고 성능 (추론 중심 - sonnet, pro, ultra)
+    claude: "claude-3-5-sonnet-latest"
+    gemini: "gemini-1.5-pro"
+  B: # 균형 (전문가 그룹 - haiku, flash)
+    claude: "claude-3-haiku-20240307"
+    gemini: "gemini-1.5-flash"
+  C: # 최경량 (분류 및 정형화 - flash-lite, 8b)
+    claude: "claude-3-haiku-20240307"
+    gemini: "gemini-1.5-flash-8b"
+
+# 역할별 등급 할당
+assignments:
+  Arbiter: A       # 최종 중재 및 리드
+  ServiceLead: A   # 분석 기준 수립
+  Expert: B        # 도메인 전문가
+  Verifier: B      # 사실 확인 및 검증
+  Enricher: C      # 기초 정보 보강 (Phase 1.5)
+  Crystallizer: C  # 결과 정제 (Phase 6)

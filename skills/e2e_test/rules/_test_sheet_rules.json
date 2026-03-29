@@ -1,0 +1,73 @@
+{
+  "rules": [
+    {
+      "id": "section_0",
+      "name": "Section 0 Test Baseline (0.1~0.7)",
+      "type": "min_match",
+      "patterns": [
+        "##\\s+0\\.\\s*Test\\s*Baseline",
+        "###\\s+0\\.1",
+        "###\\s+0\\.2",
+        "###\\s+0\\.3",
+        "###\\s+0\\.4",
+        "###\\s+0\\.5",
+        "###\\s+0\\.6",
+        "###\\s+0\\.7"
+      ],
+      "min_required": 8,
+      "detail": "Test Baseline 최상위 섹션 및 0.1~0.7 하위 섹션이 모두 존재해야 함",
+      "required": true
+    },
+    {
+      "id": "selection_reason",
+      "name": "TC 선정 이유 (blockquote 형식)",
+      "type": "tc_each_match",
+      "extract_pattern": "(?:\\|\\s*(?:\\*\\*)?선정 이유(?:\\*\\*)?\\s*\\|\\s*(.*?)\\s*\\||\\*\\*선정 이유\\*\\*\\s*:\\s*(.+)|선정 이유\\s*:\\s*(.+))",
+      "min_length": 1,
+      "detail": "각 TC마다 선정 이유가 비어있지 않은 값으로 존재해야 함",
+      "required": true
+    },
+    {
+      "id": "behavioral_condition",
+      "name": "행위적 조건 존재",
+      "type": "tc_each_match",
+      "extract_pattern": "(?:\\|\\s*(?:\\*\\*)?행위적 조건(?:\\*\\*)?\\s*\\|\\s*(.*?)\\s*\\||\\*\\*행위적 조건\\*\\*\\s*:\\s*(.+)|행위적 조건\\s*:\\s*(.+))",
+      "min_length": 1,
+      "detail": "각 TC마다 행위적 조건 ফিল드 자체가 존재해야 함",
+      "required": true
+    },
+    {
+      "id": "derivation_tree",
+      "name": "기대값 도출 트리",
+      "type": "tc_each_match",
+      "pattern": "기대값 도출 트리|├─①|④\\s*기대결과\\s*:",
+      "detail": "각 TC 본문에 도출 트리 패턴(├─① 등) 또는 도출 불필요 short form이 존재해야 함",
+      "required": true
+    },
+    {
+      "id": "stimulus_block",
+      "name": "ACTIVE TC내 STIMULUS 블록 존재",
+      "type": "tc_active_match",
+      "pattern": "━━━ STIMULUS ━━━",
+      "detail": "ACTIVE로 판별된 TC에는 반드시 STIMULUS 블록이 존재해야 함",
+      "required": true
+    },
+    {
+      "id": "na_condition_constraint",
+      "name": "N/A 행위적 조건 제약 (도출 트리 레이어 제한)",
+      "type": "tc_na_constraint",
+      "na_pattern": "\\bN/A\\b",
+      "deep_layer_pattern": "├─②|├─③",
+      "detail": "행위적 조건이 N/A인 경우, 도출 트리에 ②나 ③ 레이어가 존재하면 안 됨",
+      "required": true
+    },
+    {
+      "id": "min_active_tc_count",
+      "name": "최소 ACTIVE TC 요구",
+      "type": "min_active_tc",
+      "min_count": 1,
+      "detail": "ACTIVE TC가 최소 1개 이상 포함되어야 합니다. 코드 변경을 검증할 STIMULUS를 추가하세요.",
+      "required": true
+    }
+  ]
+}

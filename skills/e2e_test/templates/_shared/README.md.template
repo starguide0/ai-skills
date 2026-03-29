@@ -1,0 +1,48 @@
+# _shared/ 파일 구조 및 참조 관계
+
+> 이 파일은 `test-init`이 `_shared/` 스캐폴드 생성 시 자동으로 복사합니다.
+> 새 파일 추가 시 아래 테이블과 참조하는 스킬 파일의 Dependencies 섹션을 함께 업데이트하세요.
+
+## 파일 목록
+
+| 파일 | 내용 | 참조하는 Step 스킬 |
+|------|------|-------------------|
+| `env/url.md` | Service URLs per environment (dev/staging/prod) | test-gate.md, test-data.md |
+| `env/execution_rules.md` | LLM test execution rules | (execute — test-run.md Step 5) |
+| `env/accounts.md` | Test credentials per role | (execute — test-run.md Step 5) |
+| `env/api_endpoints.md` | Service API list and Base URLs | test-gate.md, test-data.md |
+| `env/permissions.json` | Project-specific Claude Code permissions | test-init.md |
+| `domain/{domain}.md` | 도메인별 비즈니스 지식 | test-plan.md |
+| `규칙/_caution_mcp_usage.md` | MCP PostgreSQL 도구 안전 사용 가이드 | test-data.md |
+| `규칙/_caution_missing_tables.json` | DB 스키마에 누락된 테이블 목록 | test-data.md |
+| `규칙/_caution_common_errors.md` | 반복 발생 오류 패턴 및 해결법 | test-data.md |
+| `규칙/_caution_error_candidates.json` | 오류 후보 패턴 및 예방 규칙 | test-data.md |
+| `test_concerns.md` | 전반적 테스트 주의사항 | (모든 단계 — 필요 시 참조) |
+
+## 파일 추가 규칙
+
+새 `_shared/` 파일을 추가할 때 반드시:
+1. 위 테이블에 새 행 추가 (파일, 내용, 참조 Step 명시)
+2. 참조하는 Step 스킬 파일의 `## _shared/ Dependencies` 섹션에 경로 추가
+
+## 디렉토리 구조
+
+```
+test/_shared/
+  README.md                          ← 이 파일 (구조 지도)
+  test_concerns.md                  ← General test concerns
+  env/
+    url.md                           ← Environment URLs
+    execution_rules.md               ← LLM execution rules
+    accounts.md                      ← Test accounts
+    api_endpoints.md                 ← API list
+    permissions.json                  ← Claude Code permissions
+  domain/
+    {domain}.md                      ← Domain-specific files
+  규칙/
+    _caution_mcp_usage.md
+    _caution_missing_tables.json
+    _caution_common_errors.md
+    _caution_error_candidates.json
+    examples/                        ← 근거 작성 예시
+```

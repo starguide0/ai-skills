@@ -1,0 +1,15 @@
+# 테스트 계정
+
+> 참조 Step: test-run.md Step 5 (Execute)
+
+## 역할별 계정
+
+| 역할 | 아이디 | 비밀번호 | 용도 |
+|------|--------|---------|------|
+| {TODO: 역할1} | {TODO: ID} | {TODO: PW} | {TODO: 용도} |
+| {TODO: 역할2} | {TODO: ID} | {TODO: PW} | {TODO: 용도} |
+
+## 인증 방식
+
+- 인증 엔드포인트: {TODO: 로그인 API URL}
+- 토큰 타입: {TODO: Bearer / Session / etc.}

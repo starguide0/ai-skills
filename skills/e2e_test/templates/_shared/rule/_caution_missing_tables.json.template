@@ -1,0 +1,16 @@
+{
+  "$schema": "missing-tables-v1",
+  "project": "{TODO: 프로젝트명}",
+  "description": "DB 스키마 메타데이터에 누락된 테이블 정보",
+
+  "missing_tables": [
+    {
+      "db": "{TODO: db_name}",
+      "table": "{TODO: table_name}",
+      "columns": [
+        { "name": "{TODO: column_name}", "type": "{TODO: data_type}", "nullable": true }
+      ],
+      "reason": "{TODO: 누락 이유}"
+    }
+  ]
+}

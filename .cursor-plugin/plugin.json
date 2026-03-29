@@ -1,0 +1,7 @@
+{
+    "name": "roy-skills",
+    "displayName": "Roy Skills",
+    "description": "Custom skills library including e2e_test, refresh_architecture, playwright_utils, and incident",
+    "version": "2.3.5",
+    "skills": "./skills/"
+}

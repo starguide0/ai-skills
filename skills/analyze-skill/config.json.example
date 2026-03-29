@@ -1,0 +1,27 @@
+{
+  "grades": {
+    "A": {
+      "claude": "claude-3-5-sonnet-latest",
+      "gemini": "gemini-1.5-pro",
+      "default": "claude-3-5-sonnet-latest"
+    },
+    "B": {
+      "claude": "claude-3-haiku-20240307",
+      "gemini": "gemini-1.5-flash",
+      "default": "claude-3-haiku-20240307"
+    },
+    "C": {
+      "claude": "claude-3-haiku-20240307",
+      "gemini": "gemini-1.5-flash-8b",
+      "default": "gemini-1.5-flash-8b"
+    }
+  },
+  "assignments": {
+    "Arbiter": "A",
+    "ServiceLead": "A",
+    "Expert": "B",
+    "Verifier": "B",
+    "Enricher": "C",
+    "Crystallizer": "C"
+  }
+}

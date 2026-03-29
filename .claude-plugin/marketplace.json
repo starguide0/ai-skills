@@ -1,0 +1,25 @@
+{
+  "name": "roy-skills-marketplace",
+  "metadata": {
+    "description": "Roy Skills Custom Marketplace including e2e_test and refresh_architecture",
+    "version": "3.0.1"
+  },
+  "owner": {
+    "name": "Roy",
+    "email": "sunglaeroh@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "roy-skills",
+      "description": "Custom skills library including e2e_test and refresh_architecture",
+      "category": "Testing & Quality",
+      "keywords": ["testing", "architecture", "e2e", "workflow", "automation"],
+      "version": "3.0.1",
+      "source": "./",
+      "author": {
+        "name": "Roy",
+        "email": "sunglaeroh@gmail.com"
+      }
+    }
+  ]
+}

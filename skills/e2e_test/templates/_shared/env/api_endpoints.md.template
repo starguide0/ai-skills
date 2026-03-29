@@ -1,0 +1,16 @@
+# API 엔드포인트
+
+> 참조 Step: test-gate.md, test-data.md
+
+## 서비스별 Base URL
+
+| 서비스 | dev | staging |
+|--------|-----|---------|
+| {TODO: 서비스1} | {TODO: URL} | {TODO: URL} |
+| {TODO: 서비스2} | {TODO: URL} | {TODO: URL} |
+
+## 주요 API 목록
+
+| 서비스 | Method | Path | 설명 |
+|--------|--------|------|------|
+| {TODO: 서비스} | {TODO: GET/POST} | {TODO: /api/v1/...} | {TODO: 설명} |

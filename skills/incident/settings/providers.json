@@ -1,0 +1,37 @@
+{
+  "_comment": "이 파일은 setup_providers.py에 의해 생성되었습니다.",
+  "log": {
+    "type": "kibana",
+    "config": {
+      "env": "prod",
+      "url": "https://kibana.test.com"
+    }
+  },
+  "code": {
+    "type": "custom",
+    "description": "Custom AI Analyzer",
+    "notes": "사용자가 직접 명시한 코드 분석 도구"
+  },
+  "db-primary": {
+    "type": "postgres-mcp",
+    "config": {
+      "env": "prod",
+      "direct_access": true
+    }
+  },
+  "metadata-docs": {
+    "type": "document",
+    "config": {
+      "path": "skills/incident/docs/service",
+      "recursive": true
+    }
+  },
+  "metadata-mcp": {
+    "type": "mcp",
+    "config": {
+      "server": "postgres_metadata_dev",
+      "tool": "mcp_postgres_metadata_dev_query",
+      "query": "SELECT * FROM service_metadata WHERE service_name = '{service}'"
+    }
+  }
+}

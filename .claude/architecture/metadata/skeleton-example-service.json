@@ -1,0 +1,15 @@
+{
+  "service": "example-service",
+  "scannedAt": "2026-03-18T00:00:00Z",
+  "files": [
+    {
+      "path": "com/example/Controller.java",
+      "type": "source",
+      "structure": {
+        "imports": ["com.example.Service"],
+        "classes": [{"name": "Controller", "methods": [{"name": "handle"}]}],
+        "functions": []
+      }
+    }
+  ]
+}

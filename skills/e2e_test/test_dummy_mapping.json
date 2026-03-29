@@ -1,0 +1,30 @@
+{
+  "summary": {
+    "total": 2,
+    "MAPPED": 1,
+    "UNMAPPED": 0,
+    "BLOCKED": 1,
+    "PARTIAL_MAPPED": 0
+  },
+  "mappings": {
+    "TC-001": {
+      "title": "Test 1",
+      "description": "Desc 1",
+      "status": "MAPPED",
+      "behavioral_check": {
+        "verdict": "PASS"
+      },
+      "data": {"id": 1}
+    },
+    "TC-002": {
+      "title": "Test 2",
+      "description": "Desc 2",
+      "status": "BLOCKED",
+      "behavioral_check": {
+        "verdict": "FAIL",
+        "conditions": ["Error occurred"]
+      },
+      "data": {}
+    }
+  }
+}

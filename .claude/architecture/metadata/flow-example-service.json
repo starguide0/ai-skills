@@ -1,0 +1,25 @@
+{
+  "$lastUpdated": "2026-03-17T23:49:57.984294+00:00",
+  "service": "example-service",
+  "features": [
+    {
+      "id": "example-service_example_flow",
+      "feature": "테스트 로직",
+      "entryPoint": "com.example.Controller.handle()",
+      "steps": [
+        "요청 수신",
+        "비즈니스 검증",
+        "데이터 저장"
+      ],
+      "policies": [
+        "권한 체크",
+        "재고 부족 시 실패"
+      ],
+      "touchedEntities": [
+        "orders",
+        "products"
+      ],
+      "diagram": "graph TD\n  A[Start] --> B(Process)"
+    }
+  ]
+}

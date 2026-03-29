@@ -1,0 +1,114 @@
+name: Release Version (Unified Suite)
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger on tags like v2.0.0
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Parse Version
+        id: parse
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          VERSION="${TAG_NAME#v}"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Get the previous tag for changelog comparison
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          echo "prev_tag=$PREV_TAG" >> $GITHUB_OUTPUT
+
+      - name: Sync Root Manifests
+        run: |
+          VERSION="${{ steps.parse.outputs.version }}"
+          
+          # 1. .claude-plugin/plugin.json
+          if [ -f ".claude-plugin/plugin.json" ]; then
+            jq ".version = \"$VERSION\"" ".claude-plugin/plugin.json" > tmp.json && mv tmp.json ".claude-plugin/plugin.json"
+          fi
+          
+          # 2. .cursor-plugin/plugin.json
+          if [ -f ".cursor-plugin/plugin.json" ]; then
+            jq ".version = \"$VERSION\"" ".cursor-plugin/plugin.json" > tmp.json && mv tmp.json ".cursor-plugin/plugin.json"
+          fi
+          
+          # 3. marketplace.json
+          MARKETPLACE=".claude-plugin/marketplace.json"
+          if [ -f "$MARKETPLACE" ]; then
+            jq "(.plugins[] | select(.name == \"roy-skills\") | .version) = \"$VERSION\"" "$MARKETPLACE" > tmp.json && mv tmp.json "$MARKETPLACE"
+          fi
+
+      - name: Generate Skills changelogs
+        run: |
+          VERSION="v${{ steps.parse.outputs.version }}"
+          PREV_TAG="${{ steps.parse.outputs.prev_tag }}"
+          
+          echo "Generating changelogs for version $VERSION (Previous tag: $PREV_TAG)"
+          
+          # List all directories under skills/
+          for skill_dir in skills/*/; do
+            if [ -d "$skill_dir" ]; then
+              skill_name=$(basename "$skill_dir")
+              CHANGELOG_PATH="${skill_dir}CHANGELOG.md"
+              
+              # Extract changes for this specific folder
+              if [ -z "$PREV_TAG" ]; then
+                CHANGES=$(git log --pretty=format:"- %s" HEAD -- "$skill_dir")
+              else
+                CHANGES=$(git log --pretty=format:"- %s" "$PREV_TAG..HEAD" -- "$skill_dir")
+              fi
+              
+              if [ ! -z "$CHANGES" ]; then
+                DATE=$(date +'%Y-%m-%d')
+                
+                # Prepend the new changes to CHANGELOG.md
+                if [ -f "$CHANGELOG_PATH" ]; then
+                  echo -e "## [$VERSION] - $DATE\n\n$CHANGES\n\n$(cat "$CHANGELOG_PATH")" > "$CHANGELOG_PATH"
+                else
+                  echo -e "# Changelog: $skill_name\n\n## [$VERSION] - $DATE\n\n$CHANGES" > "$CHANGELOG_PATH"
+                fi
+                echo "✅ Generated CHANGELOG for $skill_name"
+              else
+                echo "ℹ️ No changes detected for $skill_name. Skipping CHANGELOG."
+              fi
+            fi
+          done
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add .
+          
+          if git diff --staged --quiet; then
+            echo "No changes detected (Version may already be synced). Skipping release transaction."
+          else
+            git commit -m "chore: release ${{ github.ref_name }} [skip ci]"
+            
+            echo "🚀 Attempting to push changes to main..."
+            if git push origin HEAD:main; then
+              echo "✅ Successfully pushed to main. Syncing tag '${{ github.ref_name }}' to new commit..."
+              # Update the local tag to the new commit and force-push it
+              git tag -f ${{ github.ref_name }}
+              git push -f origin ${{ github.ref_name }}
+              echo "🎉 Release completed successfully."
+            else
+              echo "❌ Failed to push to main (Merge conflict or protection). Rolling back release tag..."
+              # Delete the remote tag to cancel the release
+              git push origin :refs/tags/${{ github.ref_name }}
+              echo "🛑 Release cancelled and tag deleted."
+              exit 1
+            fi
+          fi

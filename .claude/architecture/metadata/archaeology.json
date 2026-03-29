@@ -1,0 +1,141 @@
+{
+  "scannedAt": "2026-03-17T04:07:50.671678+00:00",
+  "files": {
+    "skills/e2e_test/tools/flow_visualizer.py": {
+      "last_modified": "2026-03-12 09:57:38 +0900",
+      "created_at": "2026-03-12 09:57:38 +0900",
+      "dormant_days": 4,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/validate_test_sheet.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/ssot_hash_manager.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/summarize_partial_results.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/validate_test_result.py": {
+      "last_modified": "2026-03-16 08:25:21 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 0,
+      "freshness": "ACTIVE",
+      "commit_count": 2,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/generate_mermaid_diagrams.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/compare_db_snapshots.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/verdict_calculator.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/validate_report_structure.py": {
+      "last_modified": "2026-03-13 10:49:27 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 3,
+      "freshness": "ACTIVE",
+      "commit_count": 2,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/validate_data_mapping.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/hook_utils.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/stimulus_executor.py": {
+      "last_modified": "2026-03-16 08:25:21 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 0,
+      "freshness": "ACTIVE",
+      "commit_count": 2,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/generate_mermaid_urls.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/agent_report_validator.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/remind_caution.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/e2e_test/tools/behavioral_gate.py": {
+      "last_modified": "2026-03-10 15:52:00 +0900",
+      "created_at": "2026-03-10 15:52:00 +0900",
+      "dormant_days": 6,
+      "freshness": "ACTIVE",
+      "commit_count": 1,
+      "contributor_count": 1
+    },
+    "skills/refresh_architecture/scripts/arch-manager.py": {
+      "last_modified": "2026-03-16 08:25:21 +0900",
+      "created_at": "2026-03-12 17:45:06 +0900",
+      "dormant_days": 0,
+      "freshness": "ACTIVE",
+      "commit_count": 5,
+      "contributor_count": 1
+    }
+  }
+}

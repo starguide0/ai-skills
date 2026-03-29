@@ -1,0 +1,10 @@
+{
+  "repos": {
+    "sample-service": {
+      "git_url": "https://github.com/example/sample-service.git",
+      "status": "NOT_CHECKED",
+      "last_error": null,
+      "last_checked_at": null
+    }
+  }
+}

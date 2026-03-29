@@ -1,0 +1,31 @@
+{
+  "pipeline_blocked": {
+    "keywords": [
+      "blocked",
+      "delay",
+      "정체",
+      "지연"
+    ],
+    "affected_service": "service-out-service",
+    "required_db_fields": {
+      "service-out_summary": [
+        "status",
+        "is_blocked",
+        "last_updated_at"
+      ]
+    },
+    "known_causes": [
+      "인프라 부하",
+      "비정상 데이터 유입",
+      "락(Lock) 경합"
+    ]
+  },
+  "unknown": {
+    "keywords": [],
+    "affected_service": "unknown",
+    "required_db_fields": {},
+    "known_causes": [
+      "원인 미상 - 분석 필요"
+    ]
+  }
+}

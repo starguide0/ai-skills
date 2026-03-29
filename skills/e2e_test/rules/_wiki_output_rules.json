@@ -1,0 +1,139 @@
+{
+  "rules": [
+    {
+      "id": "term_definition",
+      "name": "용어 정의 섹션",
+      "pattern": "용어\\s*정의|Terms?\\s*Definition",
+      "flags": "i",
+      "detail": "헤더 또는 섹션 제목에 '용어 정의' 포함 여부",
+      "required": true
+    },
+    {
+      "id": "api_response_fields",
+      "name": "API 응답 필드 안내",
+      "pattern": "API\\s*응답\\s*필드\\s*안내|API\\s*Response\\s*Fields?",
+      "flags": "i",
+      "required": true
+    },
+    {
+      "id": "code_change_summary",
+      "name": "코드 수정 요약 (Code Change Summary)",
+      "pattern": "코드\\s*수정\\s*요약|Code\\s*Change\\s*Summary",
+      "flags": "i",
+      "required": true
+    },
+    {
+      "id": "test_flow",
+      "name": "테스트 흐름 섹션",
+      "pattern": "테스트\\s*흐름|Test\\s*Flow",
+      "flags": "i",
+      "required": true
+    },
+    {
+      "id": "precondition_db",
+      "name": "사전 조건 DB 검증",
+      "pattern": "사전\\s*조건\\s*(DB\\s*)?검증|Pre.?condition\\s*(DB\\s*)?Verification",
+      "flags": "i",
+      "required": true
+    },
+    {
+      "id": "evidence_guideline",
+      "name": "근거 작성 규칙",
+      "pattern": "근거\\s*작성\\s*규칙|Evidence\\s*Guidelines?",
+      "flags": "i",
+      "required": true
+    },
+    {
+      "id": "tc_selection_reason",
+      "name": "TC 선정 이유 (blockquote 형식)",
+      "pattern": ">\\s*\\*\\*선정\\s*이유\\*\\*\\s*:",
+      "detail": "> **선정 이유**: ... 형식 blockquote 존재 여부",
+      "required": true
+    },
+    {
+      "id": "tc_details",
+      "name": "TC 상세 (Pass/Fail Evidence)",
+      "pattern": "TC-\\d+|TC \\d+\\.\\d+",
+      "required": true
+    },
+    {
+      "id": "tc_derivation_tree",
+      "name": "TC 기대값 도출 트리",
+      "pattern": "[├└]─[①-⑨]|④\\s*기대결과",
+      "detail": "├─① ... ④ 기대결과 ASCII 트리 존재 여부",
+      "required": true
+    },
+    {
+      "id": "tc_diff_table",
+      "name": "TC 검증 diff 테이블",
+      "pattern": "\\|\\s*검증\\s*항목\\s*\\|\\s*기대\\s*\\|\\s*실제\\s*\\|\\s*판정",
+      "detail": "| 검증 항목 | 기대 | 실제 | 판정 | 테이블 존재 여부",
+      "required": true
+    },
+    {
+      "id": "overall_summary",
+      "name": "전체 결과 요약 (Summary)",
+      "pattern": "전체\\s*결과\\s*요약|Overall\\s*Summary|결과\\s*요약",
+      "flags": "i",
+      "required": true
+    },
+    {
+      "id": "mermaid_block",
+      "name": "Mermaid 코드블록",
+      "pattern": "```mermaid",
+      "detail": "```mermaid 코드블록 존재 여부",
+      "required": true
+    },
+    {
+      "id": "pass_marker",
+      "name": "PASS TC ✅ 판정 존재",
+      "pattern": "✅\\s*PASS|status.*PASS|PASS.*✅",
+      "flags": "i",
+      "required": true
+    },
+    {
+      "id": "fail_evidence_if_failed",
+      "name": "FAIL TC 근거 존재 (있는 경우)",
+      "type": "fail_evidence",
+      "fail_marker_pattern": "❌|FAIL",
+      "evidence_pattern": "\\[Fail\\s*근거\\]|기대\\s*:\\s|실제\\s*:\\s",
+      "flags": "i",
+      "detail": "FAIL TC가 있으면 [Fail 근거] 또는 기대:/실제: 쌍 필요",
+      "required": true
+    },
+    {
+      "id": "baseline_sections",
+      "name": "Section 0 Test Baseline (0.1~0.7)",
+      "type": "min_match",
+      "patterns": [
+        "###?\\s*0\\.1",
+        "###?\\s*0\\.2",
+        "###?\\s*0\\.3",
+        "###?\\s*0\\.4",
+        "###?\\s*0\\.5",
+        "###?\\s*0\\.6",
+        "###?\\s*0\\.7"
+      ],
+      "min_required": 5,
+      "detail": "서브섹션 0.1 ~ 0.7 중 5개 이상 필요",
+      "required": true
+    },
+    {
+      "id": "non_empty_reasons",
+      "name": "TC 선정 이유 내용 非공백",
+      "type": "non_empty_match",
+      "extract_pattern": ">\\s*\\*\\*선정\\s*이유\\*\\*\\s*:\\s*(.+)",
+      "min_length": 5,
+      "detail": "발견된 선정 이유들의 내용이 일정 길이 이상인지 검사",
+      "required": true
+    },
+    {
+      "id": "summary_stats",
+      "name": "Summary Pass/Fail 수치",
+      "pattern": "Pass\\s*[:=]\\s*\\d+|PASS\\s*[:=]\\s*\\d+|통과\\s*[:=]\\s*\\d+",
+      "flags": "i",
+      "detail": "요약 섹션에 Pass/Fail 개수 수치 존재 여부",
+      "required": true
+    }
+  ]
+}

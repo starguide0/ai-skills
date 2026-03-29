@@ -1,0 +1,14 @@
+{
+  "$schema": "error-candidates-v1",
+  "project": "{TODO: 프로젝트명}",
+  "description": "자주 발생하는 오류 패턴 및 예방 규칙",
+
+  "error_patterns": [
+    {
+      "category": "{TODO: 오류 카테고리}",
+      "symptom": "{TODO: 증상}",
+      "cause": "{TODO: 원인}",
+      "prevention": "{TODO: 예방 규칙}"
+    }
+  ]
+}

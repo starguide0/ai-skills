@@ -1,0 +1,15 @@
+{
+  "name": "roy-skills",
+  "description": "Custom skills library including e2e_test, refresh_architecture, playwright_utils, and incident",
+  "version": "2.3.5",
+  "author": {
+    "name": "Roy",
+    "email": "sunglaeroh@gmail.com"
+  },
+  "homepage": "https://github.com/starguide0/ai-skills",
+  "repository": "https://github.com/starguide0/ai-skills",
+  "license": "MIT",
+  "keywords": ["skills", "e2e", "testing", "playwright", "architecture", "incident"],
+  "categories": ["Testing & Quality", "Development Workflows"],
+  "skills": "./skills"
+}

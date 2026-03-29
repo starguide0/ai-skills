@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Data Mapping JSON Schema",
+  "type": "object",
+  "required": ["sheet_version", "created_at", "summary", "mappings"],
+  "properties": {
+    "sheet_version": { "type": "string" },
+    "created_at": { "type": "string" },
+    "summary": {
+      "type": "object",
+      "required": ["total_tcs", "mapped", "not_found", "provisioning_needed"],
+      "properties": {
+        "total_tcs":            { "type": "integer", "minimum": 0 },
+        "mapped":               { "type": "integer", "minimum": 0 },
+        "not_found":            { "type": "integer", "minimum": 0 },
+        "provisioning_needed":  { "type": "integer", "minimum": 0 },
+        "provisioned":          { "type": "integer", "minimum": 0 },
+        "skipped":              { "type": "integer", "minimum": 0 },
+        "behavioral_mismatch":  { "type": "integer", "minimum": 0 },
+        "capture_planned":      { "type": "integer", "minimum": 0 },
+        "blocked":              { "type": "integer", "minimum": 0 }
+      }
+    },
+    "mappings": {
+      "type": "object",
+      "patternProperties": {
+        "^TC-[A-Za-z0-9.\\-]+$": {
+          "type": "object",
+          "required": ["tc_name", "status"],
+          "properties": {
+            "tc_name": { "type": "string" },
+            "status": {
+              "type": "string",
+              "enum": [
+                "MAPPED",
+                "NOT_FOUND",
+                "PROVISIONING_NEEDED",
+                "PROVISIONED",
+                "SKIPPED",
+                "PARTIAL_MAPPED",
+                "BEHAVIORAL_MISMATCH",
+                "BLOCKED",
+                "CAPTURE_PLANNED"
+              ]
+            },
+            "behavioral_check": {
+              "type": "object",
+              "required": ["verdict"],
+              "properties": {
+                "verdict":    { "type": "string", "enum": ["PASS", "FAIL", "N/A", "PENDING"] },
+                "method":     { "type": "string" },
+                "conditions": { "type": ["array", "null"] }
+              }
+            },
+            "data":       { "type": ["object", "null"] },
+            "reason":     { "type": "string" },
+            "suggestion": { "type": "string" }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "status": { "const": "MAPPED" } } },
+              "then": { "required": ["behavioral_check", "data"] }
+            },
+            {
+              "if": { "properties": { "status": { "const": "NOT_FOUND" } } },
+              "then": { "required": ["reason"] }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

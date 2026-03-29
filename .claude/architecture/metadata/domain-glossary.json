@@ -1,0 +1,17 @@
+{
+  "terms": [
+    {
+      "technicalTerm": "receipt_status",
+      "businessTerm": "입고 상태",
+      "description": "입고의 현재 단계",
+      "status": "PROPOSED"
+    },
+    {
+      "technicalTerm": "example_logic",
+      "businessTerm": "테스트 로직",
+      "description": "검증용 테스트 피쳐",
+      "status": "CONFIRMED"
+    }
+  ],
+  "$lastUpdated": "2026-03-17T23:49:44.752966+00:00"
+}

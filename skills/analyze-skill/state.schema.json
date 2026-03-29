@@ -1,0 +1,297 @@
+{
+  "_version": "2.0",
+  "_skill_hash": "48abe9961ef43bcfb9a09adb2ff0e8c9",
+  "_fingerprint": "931f94fd75e876d826de31745bdf8536",
+  "_fingerprint_source": {
+    "produced_files": [
+      "$SKILL_TMPDIR/arbiter.json",
+      "$SKILL_TMPDIR/code_analyst.json",
+      "$SKILL_TMPDIR/code_analyst_raw.json",
+      "$SKILL_TMPDIR/context_guard_raw.json",
+      "$SKILL_TMPDIR/contract_reviewer_raw.json",
+      "$SKILL_TMPDIR/deliberated.json",
+      "$SKILL_TMPDIR/facts.json",
+      "$SKILL_TMPDIR/hitl_answers.json",
+      "$SKILL_TMPDIR/interface_guard_raw.json",
+      "$SKILL_TMPDIR/logic_auditor_raw.json",
+      "$SKILL_TMPDIR/prompt_verified.json",
+      "$SKILL_TMPDIR/semantic_auditor_raw.json"
+    ],
+    "consumed_files": [
+      "\"deliberated.json\"",
+      "\"prompt_verified.json\""
+    ],
+    "field_contracts": [
+      "\"UNCERTAIN\":",
+      "\"_schema\":",
+      "\"analyst\":",
+      "\"analyst_count\":",
+      "\"answer\":",
+      "\"answers\":",
+      "\"before\":",
+      "\"block_intent_inference\":",
+      "\"block_number\":",
+      "\"block_ref\":",
+      "\"bug_ref\":",
+      "\"bugs\":",
+      "\"clarifying_question\":",
+      "\"cleared_bugs\":",
+      "\"code_excerpt\":",
+      "\"command\":",
+      "\"confidence\":",
+      "\"confidence_level\":",
+      "\"confirmed_bugs\":",
+      "\"confirmed_facts\":",
+      "\"confirmed_facts_inherited\":",
+      "\"conflict\":",
+      "\"conflicts\":",
+      "\"ctx_fields_declared\":",
+      "\"decision_impact\":",
+      "\"description\":",
+      "\"escalations\":",
+      "\"evidence\":",
+      "\"facts_field\":",
+      "\"file\":",
+      "\"file_naming_patterns\":",
+      "\"fix_order\":",
+      "\"found_in_analysts\":",
+      "\"glob_patterns_found\":",
+      "\"grep_command\":",
+      "\"hypotheses\":",
+      "\"id\":",
+      "\"inferred_as_deterministic\":",
+      "\"inferred_intent\":",
+      "\"intent\":",
+      "\"json_input_keys\":",
+      "\"json_output_keys\":",
+      "\"lang\":",
+      "\"line\":",
+      "\"line_end\":",
+      "\"line_start\":",
+      "\"merge_log\":",
+      "\"merged_ids\":",
+      "\"must_fix_first\":",
+      "\"new_bugs\":"
+    ]
+  },
+  "files": {
+    "facts.json": {
+      "produced_by": "phase1",
+      "consumed_by": [
+        "phase2_experts"
+      ],
+      "required_fields": [
+        "skill_dir",
+        "skill_type",
+        "mode",
+        "skill_hash",
+        "block_index",
+        "phase_output_files",
+        "phase_input_files",
+        "branch_conditions",
+        "mode_refs"
+      ]
+    },
+    "code_analyst_raw.json": {
+      "produced_by": "phase2_codeanalyst_or_skip",
+      "consumed_by": [
+        "phase2_5_deliberator",
+        "phase3_verifier"
+      ],
+      "required_fields": [
+        "analyst",
+        "bugs",
+        "skipped"
+      ]
+    },
+    "logic_auditor_raw.json": {
+      "produced_by": "phase2_logic_auditor",
+      "consumed_by": [
+        "phase2_5_deliberator"
+      ],
+      "required_fields": [
+        "analyst",
+        "bugs"
+      ]
+    },
+    "contract_reviewer_raw.json": {
+      "produced_by": "phase2_contract_reviewer",
+      "consumed_by": [
+        "phase2_5_deliberator"
+      ],
+      "required_fields": [
+        "analyst",
+        "bugs"
+      ]
+    },
+    "interface_guard_raw.json": {
+      "produced_by": "phase2_interface_guard",
+      "consumed_by": [
+        "phase2_5_deliberator"
+      ],
+      "required_fields": [
+        "analyst",
+        "bugs"
+      ]
+    },
+    "context_guard_raw.json": {
+      "produced_by": "phase2_context_guard",
+      "consumed_by": [
+        "phase2_5_deliberator"
+      ],
+      "required_fields": [
+        "analyst",
+        "bugs"
+      ]
+    },
+    "semantic_auditor_raw.json": {
+      "produced_by": "phase2_semantic_auditor",
+      "consumed_by": [
+        "phase2_5_deliberator"
+      ],
+      "required_fields": [
+        "analyst",
+        "bugs",
+        "block_intent_inference"
+      ]
+    },
+    "deliberated.json": {
+      "produced_by": "phase2_5_deliberator",
+      "consumed_by": [
+        "phase3_verifier"
+      ],
+      "required_fields": [
+        "bugs",
+        "merge_log"
+      ],
+      "bugs_item_required": [
+        "id",
+        "severity",
+        "file",
+        "section",
+        "description",
+        "evidence",
+        "found_in_analysts",
+        "analyst_count",
+        "verification_questions"
+      ]
+    },
+    "code_analyst.json": {
+      "produced_by": "phase3_verifier",
+      "consumed_by": [
+        "phase4_arbiter"
+      ],
+      "required_fields": [
+        "analyst",
+        "bugs",
+        "skipped",
+        "json_output_keys",
+        "json_input_keys",
+        "glob_patterns_found"
+      ]
+    },
+    "prompt_verified.json": {
+      "produced_by": "phase3_verifier",
+      "consumed_by": [
+        "phase4_arbiter"
+      ],
+      "required_fields": [
+        "bugs"
+      ],
+      "bugs_item_required": [
+        "id",
+        "severity",
+        "file",
+        "section",
+        "analyst",
+        "description",
+        "evidence",
+        "verdict",
+        "verdict_reason",
+        "found_in_analysts",
+        "analyst_count"
+      ]
+    },
+    "hitl_answers.json": {
+      "produced_by": "phase5_output",
+      "consumed_by": [
+        "phase6_crystallize"
+      ],
+      "required_fields": [
+        "answers"
+      ],
+      "answers_item_required": [
+        "bug_ref",
+        "answer",
+        "verdict"
+      ]
+    },
+    "arbiter.json": {
+      "produced_by": "phase4_arbiter",
+      "consumed_by": [
+        "phase5_output"
+      ],
+      "required_fields": [
+        "confirmed_bugs",
+        "cleared_bugs",
+        "new_bugs",
+        "conflicts",
+        "fix_order",
+        "escalations",
+        "inferred_as_deterministic"
+      ]
+    }
+  },
+  "dependency_graph": {
+    "phase2_experts": [
+      "facts.json"
+    ],
+    "phase2_5_deliberator": [
+      "code_analyst_raw.json",
+      "logic_auditor_raw.json",
+      "contract_reviewer_raw.json",
+      "interface_guard_raw.json",
+      "context_guard_raw.json",
+      "semantic_auditor_raw.json"
+    ],
+    "phase3_verifier": [
+      "deliberated.json",
+      "code_analyst_raw.json"
+    ],
+    "phase4_arbiter": [
+      "code_analyst.json",
+      "prompt_verified.json"
+    ],
+    "phase5_output": [
+      "code_analyst.json",
+      "prompt_verified.json",
+      "arbiter.json"
+    ]
+  },
+  "expert_input_view": {
+    "LogicAuditor": [
+      "branch_conditions",
+      "mode_refs",
+      "block_index_pseudo"
+    ],
+    "ContractReviewer": [
+      "json_key_refs",
+      "phase_output_files",
+      "phase_input_files",
+      "block_index_data"
+    ],
+    "InterfaceGuard": [
+      "phase_output_files",
+      "phase_input_files",
+      "block_index"
+    ],
+    "ContextGuard": [
+      "block_index_summary",
+      "mode_refs",
+      "json_key_refs"
+    ],
+    "SemanticAuditor": [
+      "block_index_pseudo_and_code"
+    ]
+  }
+}
